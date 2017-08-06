@@ -1,11 +1,11 @@
 
-const handleDefault = ({ setDefaultMessageHandler, notesModel }) =>
+const handleDefault = ({ setDefaultMessageHandler, notesModel, addHelpLine}) => {
   setDefaultMessageHandler((message, reply) =>
     notesModel.getNotes(message.chat.id, message.text, (err, notes) => {
       if (!notes || !notes.length) {
         return reply('no notes were found');
       }
-      let maxIdLetters = String(notes[notes.length-1].id).length;
+      let maxIdLetters = String(notes[ notes.length - 1 ].id).length;
       const text = notes
         .map(n => {
           let idStr = String(n.id);
@@ -18,5 +18,8 @@ const handleDefault = ({ setDefaultMessageHandler, notesModel }) =>
       reply(text);
     })
   );
+
+  addHelpLine("to search by tag, just write it down")
+};
 
 module.exports = handleDefault;

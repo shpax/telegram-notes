@@ -1,7 +1,7 @@
 
 const patterns = [/^n\s/, /^н\s/,/^new\s/];
 
-const handlePattern = ({ on, notesModel, startConversation }) =>
+const handlePattern = ({ on, notesModel, startConversation, addHelpLine}) => {
   on(patterns, (message, reply) => {
     const user_id = message.chat.id;
 
@@ -9,14 +9,14 @@ const handlePattern = ({ on, notesModel, startConversation }) =>
       ({ text }, conv) => {
         conv.note = {
           user_id,
-          text: text.replace(/^[^\s]+\s/,'')
+          text: text.replace(/^[^\s]+\s/, '')
         };
         notesModel.getTags(user_id, (err, tags) => {
-          reply('please, write a tag for this note', tags.slice(0, 10).map(t => [t]));
+          reply('please, write a tag for this note', tags.slice(0, 10).map(t => [ t ]));
         })
       },
       ({ text }, conv) => {
-        const [tag_main, tag_secondary = ''] = text.split(' ', 2);
+        const [ tag_main, tag_secondary = '' ] = text.split(' ', 2);
         conv.note.tag_main = tag_main;
         conv.note.tag_secondary = tag_secondary;
 
@@ -25,12 +25,15 @@ const handlePattern = ({ on, notesModel, startConversation }) =>
             reply(err);
           } else {
             notesModel.getTags(user_id, (err, tags) => {
-              reply('your note has been saved', tags.slice(0,10).map(t => [t]));
+              reply('your note has been saved', tags.slice(0, 10).map(t => [ t ]));
             })
           }
         })
       }
     ]);
   });
+
+  addHelpLine("type `n|н|new [text] ` to add a note")
+};
 
 module.exports = handlePattern;

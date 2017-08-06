@@ -1,7 +1,7 @@
 
 const patterns = [/^rm?\s\d+/, /^remove\s\d+/];
 
-const handlePattern = ({ on, notesModel }) =>
+const handlePattern = ({ on, notesModel, addHelpLine }) => {
   on(patterns, (message, reply) => {
     const { text, chat } = message;
     const user_id = chat.id;
@@ -13,5 +13,9 @@ const handlePattern = ({ on, notesModel }) =>
       });
     })
   });
+
+  addHelpLine("type `rm|remove [id] ` to remove note");
+};
+
 
 module.exports = handlePattern;
